@@ -1,6 +1,10 @@
 <?php
 require_once "../../includes/database/config.php";
-
+session_start();
+if ($_SESSION['role']!== 'admin' && $_SESSION['role'] !== 'superadmin') {
+  header("Location: ../../public/login/index.php");
+  exit();
+} 
 // Fetch products from database
 try {
     $stmt = $pdo->query("SELECT products.id AS product_id, products.category_id, products.name AS product_name, products.description, products.stock, products.price, products.image, products.is_active, products.created_at, products.updated_at, categories.name AS category_name 

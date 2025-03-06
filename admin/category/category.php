@@ -1,6 +1,10 @@
 <?php
 require_once "../../includes/database/config.php";
-
+session_start();
+if ($_SESSION['role']!== 'admin' && $_SESSION['role'] !== 'superadmin') {
+    header("Location: ../../public/login/index.php");
+    exit();
+  } 
 
 // Handle category activation/deactivation
 if (isset($_GET['action']) && isset($_GET['id'])) {

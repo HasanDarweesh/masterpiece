@@ -142,6 +142,7 @@ try {
                 <input type="file" class="form-control-file" name="product_image">
             </div>
             <button type="submit" class="btn btn-primary" name="add_product">Add Product</button>
+            <a href="product.php" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>
