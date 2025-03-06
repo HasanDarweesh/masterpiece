@@ -1,4 +1,7 @@
-.bg-primary,
+
+#liveSearch { margin-bottom: 1rem; }
+    /* Override Bootstrap primary color (accent) from blue to black */
+    .bg-primary,
 .btn-primary,
 .navbar-dark .navbar-brand,
 .navbar-dark .navbar-nav .nav-link.active {

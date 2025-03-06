@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         setUserSession($user);
 
         if ($user['role'] === 'superadmin' || $user['role'] === 'admin') {
-            header("Location: ../dashboard/index.php");
+            header("Location: ../../admin/home/index.php");
         } else {
             header("Location: ../home/index.php");
         }
