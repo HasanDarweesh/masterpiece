@@ -49,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </head>
 <body>
-
 <div class="container-fluid">
     <div class="row">
 <?php include('navbar.php'); ?>
