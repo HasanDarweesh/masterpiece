@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';  // Database host (e.g., 127.0.0.1)
-$dbname = 'ecommerce';  // Your database name
+$dbname = 'ecommarce_pro';  // Your database name
 $username = 'root';  // Your database username
 $password = '';  // Your database password
 
