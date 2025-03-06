@@ -1,14 +1,22 @@
-<<<<<<< HEAD
+<?php
 
-=======
-<!-- /*
-* Bootstrap 5
-* Template Name: Craftify
-* Template Author: Untree.co
-* Template URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/ -->
->>>>>>> 7455ddc9d976f641fd5c95f2e826a51c3e0c19d3
+require_once __DIR__ . '/../../includes/database/config.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $productId = $_POST['productId'];
+  $customText = $_POST['customText'];
+  $textColor = $_POST['textColor'];
+
+  // إضافة المنتج إلى السلة مع النص المخصص واللون
+  // يمكنك استخدام هذه القيم لتحديث السلة أو تخزينها في الجلسة أو قاعدة البيانات
+}
+
+
+?>
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,18 +30,9 @@
 
 		<!-- Bootstrap CSS -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
-<<<<<<< HEAD
-    
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 		<link href="css/tiny-slider.css" rel="stylesheet">
 		<link href="css/style.css" rel="stylesheet">
-
-
-=======
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-		<link href="css/tiny-slider.css" rel="stylesheet">
-		<link href="css/style.css" rel="stylesheet">
->>>>>>> 7455ddc9d976f641fd5c95f2e826a51c3e0c19d3
 		<title>Craftify Free Bootstrap 5 Template for Craftifyture and Interior Design Websites by Untree.co </title>
 	</head>
 
@@ -72,9 +71,6 @@
 		<!-- End Header/Navigation -->
 
 
-<<<<<<< HEAD
-		
-=======
 		<!-- Start Hero Section -->
 		<div class="hero">
 			<div class="container">
@@ -95,7 +91,6 @@
 			</div>
 		</div>
 	<!-- End Hero Section -->
->>>>>>> 7455ddc9d976f641fd5c95f2e826a51c3e0c19d3
 
 
 		

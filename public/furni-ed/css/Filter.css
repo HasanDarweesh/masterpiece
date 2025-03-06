@@ -1,0 +1,43 @@
+   
+    .custom-control-input:checked ~ .custom-control-label::before {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .custom-control-input {
+        width: 30px;
+        height: 30px;
+    }
+
+    .custom-control-label {
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .custom-control-label::before {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        transition: all 0.3s ease; 
+    }
+
+    .filter-container {
+        display: flex;
+        justify-content: space-evenly; 
+        flex-wrap: wrap;
+        margin: 10px;
+    }
+
+    .custom-control-inline {
+        margin-right: 20px; 
+    }
+
+    .custom-control-label:hover::before {
+        background-color: #0056b3; 
+        border-color: #0056b3;
+        transform: scale(1.1); 
+    }
+
+    .custom-control-label:hover {
+        color: #0056b3;
+    }

@@ -1,0 +1,19 @@
+.bg-primary,
+            .btn-primary,
+            .navbar-dark .navbar-brand,
+            .navbar-dark .navbar-nav .nav-link.active {
+            background-color: #000 !important;
+            border-color: #000 !important;
+            }
+            /* Navbar dark theming */
+            .navbar-dark .navbar-nav .nav-link {
+            color: #fff;
+            }
+            /* Sidebar styling remains the same */
+            .sidebar {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            }
+            .sidebar .nav-link {
+            color: #000;
+            }

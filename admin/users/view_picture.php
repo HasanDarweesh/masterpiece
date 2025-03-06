@@ -1,14 +1,14 @@
 <?php
 require_once "../../includes/database/config.php";
 
-if (!isset($_GET['student_id'])) {
+if (!isset($_GET['id'])) {
     die("No user specified.");
 }
 
-$student_id = $_GET['student_id'];
+$id = $_GET['id'];
 $query = "SELECT profile_picture, name FROM users WHERE id = :id AND deleted_at IS NULL";
 $stmt = $pdo->prepare($query);
-$stmt->bindParam(":id", $student_id);
+$stmt->bindParam(":id", $id);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -31,7 +31,7 @@ if (!empty($user['profile_picture'])) {
 </head>
 <body class="container my-5 text-center">
   <h1><?php echo $user['name'];?>'s Full Profile Picture</h1>
-  <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Picture" class="img-fluid">
+  <img src="<?= htmlspecialchars($imagePath) ?>" alt="Profile Picture" class="img-thumbnail" width="40%">
   <br><br>
   <!-- This exit button uses history.back() to return to the previous (listing) page -->
   <a href="index.php" class="btn btn-secondary">Exit</a>
