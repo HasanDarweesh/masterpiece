@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if (isset($message)): ?>
                 <div class="message"><?= $message; ?></div>
             <?php endif; ?>
-            <button type="submit">SingUp</button>
+            <button type="submit">Sign Up</button>
             <div class="register">
                 <p>Do you have an account? <a href="../login/index.php">Login</a></p>
             </div>
