@@ -33,8 +33,8 @@
 		
 		
 <!-- Start Singin Section -->
-<div class="Singin-section">
-	<div class="container-fluid d-flex justify-content-center align-items-center" style="height: 50vh; padding: 5px 410px ">
+<div class="Singin-section p-0">
+	<div class="container-fluid d-flex justify-content-center align-items-center" style=" padding: 5px 410px ">
 		<div class="row justify-content-center">
 	  
             <!-- Terms of Use -->
