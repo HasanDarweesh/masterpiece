@@ -36,7 +36,7 @@ session_start(); // Start the session
     class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark"
     arial-label="Craftify navigation bar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Craftify<span>.</span></a>
+      <a class="navbar-brand" href="index.php">Craftify<span>.</span></a>
 
       <button
         class="navbar-toggler"
@@ -52,12 +52,11 @@ session_start(); // Start the session
       <div class="collapse navbar-collapse" id="navbarsCraftify">
         <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
           <li class="nav-item active">
-            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="../../public/home/index.php">Home</a>
           </li>
           <li><a class="nav-link" href="shop.html">Shop</a></li>
           <li><a class="nav-link" href="about.html">About us</a></li>
-          <li><a class="nav-link" href="services.html">Services</a></li>
-          <li><a class="nav-link" href="Singin.html">Sing in</a></li>
+          <li><a class="nav-link" href="#services">Services</a></li>
           <li><a class="nav-link" href="contact.html">Contact us</a></li>
         </ul>
 

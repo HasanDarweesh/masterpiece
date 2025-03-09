@@ -714,3 +714,16 @@ textarea {
     border-radius: 50%;
     background: rgba(59, 93, 80, 0.2); }
 
+    ::-webkit-scrollbar {
+      width: 0.6rem !important;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background-color: #5584b0 !important;
+      border-radius: 3rem !important;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: #eff2f1 !important;
+      margin-block: -0.4rem !important;
+      border-radius: 3rem !important;
+    }

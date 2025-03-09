@@ -170,7 +170,7 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="row">
               <div class="col-md-12">
-                <button class="btn btn-black btn-lg btn-block cart-btn" onclick="window.location='checkout.html'">Proceed To Checkout</button>
+                <a href="../checkout/index.php"><button class="btn btn-black btn-lg btn-block cart-btn" onclick="window.location='checkout.html'">Proceed To Checkout</button></a>
               </div>
             </div>
           </div>
