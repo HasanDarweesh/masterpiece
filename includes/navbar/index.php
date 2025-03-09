@@ -24,6 +24,7 @@ session_start(); // Start the session
     rel="stylesheet" />
   <!-- <link href="../../includes/css/tiny-slider.css" rel="stylesheet" /> -->
   <link href="../../includes/css/tiny-slider.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
   <!-- <link href="css/style.css" rel="stylesheet" /> -->
   <link rel="stylesheet" href="../../includes/css/style.css" />
@@ -36,7 +37,7 @@ session_start(); // Start the session
     class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark"
     arial-label="Craftify navigation bar">
     <div class="container">
-      <a class="navbar-brand" href="index.php">Craftify<span>.</span></a>
+      <a class="navbar-brand" href="../../public/home/index.php">Craftify<span>.</span></a>
 
       <button
         class="navbar-toggler"
@@ -54,22 +55,21 @@ session_start(); // Start the session
           <li class="nav-item active">
             <a class="nav-link" href="../../public/home/index.php">Home</a>
           </li>
-          <li><a class="nav-link" href="shop.html">Shop</a></li>
-          <li><a class="nav-link" href="about.html">About us</a></li>
-          <li><a class="nav-link" href="#services">Services</a></li>
-          <li><a class="nav-link" href="contact.html">Contact us</a></li>
+          <li><a class="nav-link" href="../../public/products/shop.php">Shop</a></li>
+          <li><a class="nav-link" href="../../public/about/about.php">About us</a></li>
+          <li><a class="nav-link" href="../../public/products/contact.php">Contact us</a></li>
         </ul>
 
         <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
           <?php
           if (isset($_SESSION['user_id'])) { ?>
             <li>
-              <a class="nav-link" href="../profile/profile.php">
+              <a class="nav-link" href="../../public/profile/profile.php">
                 <img src="../../includes/images/user.svg" />
               </a>
             </li>
             <li>
-              <a class="nav-link" href="../cart/cart.php">
+              <a class="nav-link" href="../../public/cart/cart.php">
                 <img src="../../includes/images/cart.svg" />
               </a>
             </li>
