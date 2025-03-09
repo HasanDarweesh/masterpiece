@@ -68,7 +68,7 @@
     </form>
 </div>
 
-
+<?php include("../../includes/footer/index.php") ?>
 <script>
     // Load user details when page loads
     fetch('get_user_details.php')

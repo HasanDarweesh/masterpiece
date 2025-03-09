@@ -1,9 +1,4 @@
-/*
-* Template Name: UntreeStore
-* Template Author: Untree.co
-* Author URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 body {
   overflow-x: hidden;
@@ -42,10 +37,10 @@ a {
       opacity: .4; }
   .custom-navbar .navbar-toggler {
     border-color: transparent; }
-    .custom-navbar .navbar-toggler:active, .custom-navbar .navbar-toggler:focus {
+    /* .custom-navbar .navbar-toggler:active, .custom-navbar .navbar-toggler:focus {
       -webkit-box-shadow: none;
       box-shadow: none;
-      outline: none; }
+      outline: none; } */
   @media (min-width: 992px) {
     .custom-navbar .custom-navbar-nav li {
       margin-left: 15px;
@@ -77,10 +72,6 @@ a {
       opacity: 1; }
       .custom-navbar .custom-navbar-nav li a:hover:before {
         width: calc(100% - 16px); }
-  .custom-navbar .custom-navbar-nav li.active a {
-    opacity: 1; }
-    .custom-navbar .custom-navbar-nav li.active a:before {
-      width: calc(100% - 16px); }
   .custom-navbar .custom-navbar-cta {
     margin-left: 0 !important;
     -webkit-box-orient: horizontal;
