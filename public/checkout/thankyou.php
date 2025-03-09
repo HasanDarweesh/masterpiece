@@ -46,7 +46,7 @@
     </div>
   </div>
 
-
+  <?php include("../../includes/footer/index.php") ?>
 		<script src="../../includes/js/bootstrap.bundle.min.js"></script>
 		<script src="../../includes/js/tiny-slider.js"></script>
 		<script src="../../includes/js/custom.js"></script>
