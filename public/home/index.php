@@ -3,7 +3,7 @@ require_once "../../includes/database/config.php";
 
 // Query to fetch the most recent 3 items
 try {
-    $stmt = $pdo->prepare('SELECT name, image, price FROM products ORDER BY created_at DESC LIMIT 3');
+    $stmt = $pdo->prepare('SELECT id, name, image, price FROM products ORDER BY created_at DESC LIMIT 3');
     $stmt->execute();
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -47,7 +47,7 @@ try {
                             <div class="intro-excerpt">
                                 <h1>Personalized <span class="d-block">Products</span></h1>
                                 <p class="mb-4">Custom products that reflect your unique style, for personal use or gifts. Let us bring your ideas to life.</p>
-                                <p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+                                <p><a href="../products/shop.php" class="btn btn-secondary me-2">Shop Now</a></p>
                             </div>
                         </div>
                         <div class="col-lg-7">
@@ -63,17 +63,17 @@ try {
         <div class="carousel-item">
             <div class="hero">
                 <div class="container px-5">
-                    <div class="row justify-content-between">
+                    <div class="row justify-content-between align-items-start">
                         <div class="col-lg-5">
                             <div class="intro-excerpt">
                                 <h1>Custom <span class="d-block">Engravings</span></h1>
                                 <p class="mb-4">Add a personal touch to your items with custom engravings. Perfect for gifts and special occasions.</p>
-                                <p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+								<p><a href="../products/shop.php" class="btn btn-secondary me-2">Shop Now</a></p>
                             </div>
                         </div>
                         <div class="col-lg-7">
-                            <div class="hero-img-wrap">
-                                <img src="../../includes/images/pngtre2.png" class="img-fluid">
+                            <div class="hero-img-wrap ml-5">
+                                <img src="../../includes/images/slider2.png" class="img-fluid w-75">
                             </div>
                         </div>
                     </div>
@@ -89,12 +89,12 @@ try {
                             <div class="intro-excerpt">
                                 <h1>Exclusive <span class="d-block">Designs</span></h1>
                                 <p class="mb-4">Discover our exclusive range of custom designs for phone cases, shirts, hoodies, and more.</p>
-                                <p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+								<p><a href="../products/shop.php" class="btn btn-secondary me-2">Shop Now</a></p>
                             </div>
                         </div>
                         <div class="col-lg-7">
                             <div class="hero-img-wrap">
-                                <img src="../../includes/images/pngtre3.png" class="img-fluid">
+                                <img src="../../includes/images/slider3.png" class="img-fluid w-75">
                             </div>
                         </div>
                     </div>
@@ -122,7 +122,7 @@ try {
             <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
                 <h2 class="mb-4 section-title">New Arrivals</h2>
                 <p class="mb-4">Discover our latest products</p>
-                <p><a href="shop.html" class="btn">Explore</a></p>
+                <p><a href="../products/shop.php" class="btn">Explore</a></p>
             </div> 
             <!-- End Column 1 -->
 
@@ -131,10 +131,10 @@ try {
             if (!empty($products)) {
                 foreach ($products as $product) {
                     echo '<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                            <a class="product-item" href="cart.html">
+                            <a class="product-item" href="../../admin/product/product_details.php?id='.$product["id"].'">
                                 <img src="../../admin/product/uploads/product_images/'.$product["image"].'" class="img-fluid product-thumbnail">
                                 <h3 class="product-title">'.$product["name"].'</h3>
-                                <strong class="product-price">$'.$product["price"].'</strong>
+                                <strong class="product-price">JOD '.$product["price"].'</strong>
                                 <span class="icon-cross">
                                     <img src="../../includes/images/cross.svg" class="img-fluid">
                                 </span>
@@ -237,7 +237,6 @@ try {
 							<li>Top-notch Quality.</li>
 							<li>Perfect for Gifts.</li>
 						</ul>
-						<p><a herf="#" class="btn">Explore</a></p>
 					</div>
 				</div>
 			</div>
@@ -246,7 +245,7 @@ try {
 
 	
 		<!-- Start Testimonial Slider -->
-		<div class="testimonial-section">
+		<!-- <div class="testimonial-section">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-7 mx-auto text-center">
@@ -286,9 +285,9 @@ try {
 										</div>
 									</div>
 								</div> 
-								<!-- END item -->
+								 END item -->
 
-								<div class="item">
+								<!-- <div class="item">
 									<div class="row justify-content-center">
 										<div class="col-lg-8 mx-auto">
 
@@ -308,10 +307,10 @@ try {
 
 										</div>
 									</div>
-								</div> 
+								</div>  -->
 								<!-- END item -->
 
-								<div class="item">
+								<!-- <div class="item">
 									<div class="row justify-content-center">
 										<div class="col-lg-8 mx-auto">
 
@@ -331,50 +330,26 @@ try {
 
 										</div>
 									</div>
-								</div> 
+								</div>  -->
 								<!-- END item -->
-
+<!-- 
 							</div>
 
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> --> 
 		<!-- End Testimonial Slider -->
 
 		<!-- Start Footer Section -->
 		<footer class="footer-section">
 			<div class="container relative">
 
-
-				<div class="row">
-					<div class="col-lg-8">
-						<div class="subscription-form">
-							<h3 class="d-flex align-items-center"><span class="me-1"><img src="../../includes/images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
-
-							<form action="#" class="row g-3">
-								<div class="col-auto">
-									<input type="text" class="form-control" placeholder="Enter your name">
-								</div>
-								<div class="col-auto">
-									<input type="email" class="form-control" placeholder="Enter your email">
-								</div>
-								<div class="col-auto">
-									<button class="btn btn-primary">
-										<span class="fa fa-paper-plane"></span>
-									</button>
-								</div>
-							</form>
-
-						</div>
-					</div>
-				</div>
-
 				<div class="row g-5 mb-5">
 					<div class="col-lg-4">
 						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Craftify<span>.</span></a></div>
-						<p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Custom products that reflect your unique style, for personal use or gifts. Let us bring your ideas to life. Pellentesque habitant</p>
+						<p class="mb-4">Custom products that reflect your unique style, for personal use or gifts. Let us bring your ideas to life.</p>
 
 						<ul class="list-unstyled custom-social">
 							<li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
@@ -389,9 +364,8 @@ try {
 							<div class="col-6 col-sm-6 col-md-3">
 								<ul class="list-unstyled">
 									<li><a href="#">About us</a></li>
-									<li><a href="#">Services</a></li>
-									<li><a href="#">Sing in</a></li>
-									<li><a href="#">Contact us</a></li>
+									<li><a href="../../public/products/shop.php">Shop</a></li>
+									<li><a href="../../public/products/contact.php">Contact us</a></li>
 								</ul>
 							</div>
 
@@ -408,7 +382,7 @@ try {
 						<div class="col-lg-6">
 							<p class="mb-2 text-center text-lg-start">
 								Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; 
-								Designed with love by <a href="http://127.0.0.1:5500/furni-ed/index.html">Craftify</a> 
+								Designed with love by Craftify 
 								to offer unique and customized products for you.
 							</p>
 							

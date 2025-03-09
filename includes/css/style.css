@@ -727,3 +727,7 @@ textarea {
       margin-block: -0.4rem !important;
       border-radius: 3rem !important;
     }
+
+    .ring_slider {
+      margin: auto;
+    }
