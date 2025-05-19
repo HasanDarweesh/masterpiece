@@ -4,7 +4,7 @@ require_once '../../includes/database/config.php';
 if (isset($_GET['order_id'])) {
     $order_id = $_GET['order_id'];
 
-    $sql = "SELECT products.name AS product_name, order_items.quantity, order_items.price, products.image
+    $sql = "SELECT products.name AS product_name, order_items.quantity, order_items.price, products.image, order_items.print_text
     FROM order_items
     JOIN products ON order_items.product_id = products.id
     WHERE order_items.order_id = :order_id";
@@ -62,6 +62,7 @@ if (isset($_GET['order_id'])) {
                                     <th>Product Image</th>
                                     <th>Product Name</th>
                                     <th>Quantity</th>
+                                    <th>Custom Text</th>
                                     <th>Price</th>
                                 </tr>
                             </thead>
@@ -70,13 +71,14 @@ if (isset($_GET['order_id'])) {
                                     <tr>
                                         <td>
                                             <?php if ($item['image']): ?>
-                                                <img src="<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['product_name']); ?>" class="img-fluid" style="max-width: 100px;">
+                                                <img src="../../admin/product/uploads/product_images/<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['product_name']); ?>" class="img-fluid" style="max-width: 100px;">
                                             <?php else: ?>
                                                 <img src="default-image.jpg" alt="No Image" class="img-fluid" style="max-width: 100px;">
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo htmlspecialchars($item['product_name']); ?></td>
                                         <td><?php echo $item['quantity']; ?></td>
+                                        <td><?php echo $item['print_text']; ?></td>
                                         <td>$<?php echo number_format($item['price'], 2); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
