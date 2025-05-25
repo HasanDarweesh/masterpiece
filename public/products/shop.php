@@ -102,90 +102,99 @@ try {
 
 					</div>
 				</div>
-			</div>
-		<!-- End Hero Section -->
-
-<!-- Start Filter Price --><!-- Start Filter Section -->
-<form method="GET" action="shop.php" class="filter-form">
-    <?php
-    $query = "SELECT * FROM categories WHERE is_active = 1";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $categories = $stmt->fetchAll();
-    ?>
-
-    <div class="filters-wrapper">
-        <!-- ✅ فلتر التصنيفات -->
-        <div class="filter-box">
-            <h4>Categories</h4>
-            <?php foreach ($categories as $category): ?>
-                <div class="custom-control">
-                    <input type="checkbox" class="custom-control-input" id="cat<?= $category['id'] ?>" name="categories[]" value="<?= $category['id']; ?>"
-                        <?php if (isset($_GET['categories']) && in_array($category['id'], $_GET['categories'])) echo 'checked'; ?>
-                        onchange="this.form.submit()">
-                    <label class="custom-control-label" for="cat<?= $category['id'] ?>"><?= htmlspecialchars($category['name']); ?></label>
-                </div>
-            <?php endforeach; ?>
+			</div><!-- الحل الأول: فلتر جانبي -->
+<div class="shop-container">
+    <!-- Sidebar للفلاتر -->
+    <div class="filter-sidebar">
+        <div class="filter-header">
+            Filters
         </div>
-
-        <!-- ✅ فلتر السعر -->
-        <div class="filter-box">
-            <h4>Price Range</h4>
+        
+        <form method="GET" action="shop.php" class="filter-content">
             <?php
-            $prices = [
-                1 => "Under JOD 50",
-                2 => "JOD 50 - 100",
-                3 => "JOD 100 - 200",
-                4 => "Above JOD 200"
-            ];
-            foreach ($prices as $val => $label): ?>
-                <div class="custom-control">
-                    <input type="radio" class="custom-control-input" id="price<?= $val ?>" name="price_range" value="<?= $val ?>"
-                        <?= (isset($_GET['price_range']) && $_GET['price_range'] == $val) ? 'checked' : ''; ?>
-                        onchange="this.form.submit()">
-                    <label class="custom-control-label" for="price<?= $val ?>"><?= $label ?></label>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</form>
-<!-- End Filter Section -->
+            $query = "SELECT * FROM categories WHERE is_active = 1";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $categories = $stmt->fetchAll();
+            ?>
 
-
-<!-- End Filter Price -->
-
-
-</div>
-
-
-</div>
-
-
-		<div class="untree_co-section product-section before-footer-section">
-    <div class="container">
-        <div class="row">
-
-            <?php foreach ($products as $product): ?>
-            <!-- Start Column -->
-            <div class="col-12 col-md-4 col-lg-3 mb-5">
-			
-           <a class="product-item" href="../../admin/product/product_details.php?id=<?= $product['id'] ?>">
-
-                        <img src="../../admin/product/uploads/product_images/<?php echo htmlspecialchars($product['product_image']); ?>" class="img-fluid product-thumbnail" alt="<?php echo htmlspecialchars($product['name']); ?>">
-
-						<h3 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h3>
-						
-						<strong class="product-price"><?php echo 'JOD ' . number_format($product['price'], 2); ?></strong>
-
-						<span class="icon-cross">
-                        <img src="../../includes/images/icon_plus.png" class="img-fluid" alt="cross">
-
-						</span>
-                </a>
+            <!-- فلتر التصنيفات -->
+            <div class="filter-section">
+                <h4>Categories</h4>
+                <?php foreach ($categories as $category): ?>
+                    <div class="filter-item">
+                        <input type="checkbox" 
+                               id="cat<?= $category['id'] ?>" 
+                               name="categories[]" 
+                               value="<?= $category['id']; ?>"
+                               <?php if (isset($_GET['categories']) && in_array($category['id'], $_GET['categories'])) echo 'checked'; ?>
+                               onchange="this.form.submit()">
+                        <label for="cat<?= $category['id'] ?>">
+                            <?= htmlspecialchars($category['name']); ?>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
             </div>
-            <!-- End Column -->
-            <?php endforeach; ?>
 
+            <!-- فلتر السعر -->
+            <div class="filter-section">
+                <h4>Price Range</h4>
+                <?php
+                $prices = [
+                    1 => "Under JOD 50",
+                    2 => "JOD 50 - 100", 
+                    3 => "JOD 100 - 200",
+                    4 => "Above JOD 200"
+                ];
+                foreach ($prices as $val => $label): ?>
+                    <div class="filter-item">
+                        <input type="radio" 
+                               id="price<?= $val ?>" 
+                               name="price_range" 
+                               value="<?= $val ?>"
+                               <?= (isset($_GET['price_range']) && $_GET['price_range'] == $val) ? 'checked' : ''; ?>
+                               onchange="this.form.submit()">
+                        <label for="price<?= $val ?>">
+                            <?= $label ?>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- زر إعادة تعيين -->
+            <button type="button" class="reset-filters" onclick="window.location.href='shop.php'">
+                Clear All Filters
+            </button>
+        </form>
+    </div>
+
+    <!-- منطقة المنتجات -->
+    <div class="products-area">
+        <!-- عداد المنتجات -->
+        <div class="products-count">
+            Showing <?= count($products) ?> Products
+        </div>
+        
+        <!-- هنا تضع grid المنتجات العادي -->
+        <div class="untree_co-section product-section">
+            <div class="container-fluid p-0">
+                <div class="row">
+                    <?php foreach ($products as $product): ?>
+                    <div class="col-12 col-md-4 col-lg-3 mb-4">
+                        <a class="product-item" href="../../admin/product/product_details.php?id=<?= $product['id'] ?>">
+                            <img src="../../admin/product/uploads/product_images/<?php echo htmlspecialchars($product['product_image']); ?>" 
+                                 class="img-fluid product-thumbnail" 
+                                 alt="<?php echo htmlspecialchars($product['name']); ?>">
+                            <h3 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h3>
+                            <strong class="product-price"><?php echo 'JOD ' . number_format($product['price'], 2); ?></strong>
+                            <span class="icon-cross">
+                                <img src="../../includes/images/icon_plus.png" class="img-fluid" alt="cross">
+                            </span>
+                        </a>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -204,6 +213,9 @@ try {
             let scrollAmount = 0;
 
     function scrollProducts() {
+        if (slider==null || slider.scrollWidth ==null) {
+            return;
+        }
         if (scrollAmount >= slider.scrollWidth / 2) {
             scrollAmount = 0;
             slider.style.transform = `translateX(0)`;
