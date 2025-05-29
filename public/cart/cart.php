@@ -1,29 +1,54 @@
 <?php
 require "../../includes/database/config.php";
 include("../../includes/navbar/index.php");
-$sql = "SELECT
-        order_items.id,
-        order_items.order_id,
-        order_items.product_id,
-        order_items.quantity,
-        order_items.price,
-        order_items.print_text,
-        orders.total_price,
-        products.name,
-        products.image,
-        products.price,
-          (order_items.quantity * products.price) AS total_amount
-        FROM
-          order_items
-          JOIN products ON order_items.product_id = products.id
-          JOIN orders ON order_items.order_id = orders.id
-        WHERE
-          orders.user_id = :user_id  AND orders.status = 'pending'";
 
-$stmt = $pdo->prepare($sql);
-$stmt->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-$stmt->execute();
-$order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// التحقق من تسجيل الدخول أولاً
+$order_items = [];
+if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
+    // للمستخدمين المسجلين - جلب البيانات من قاعدة البيانات
+    $sql = "SELECT
+            order_items.id,
+            order_items.order_id,
+            order_items.product_id,
+            order_items.quantity,
+            order_items.price,
+            order_items.print_text,
+            orders.total_price,
+            products.name,
+            products.image,
+            products.price,
+              (order_items.quantity * products.price) AS total_amount
+            FROM
+              order_items
+              JOIN products ON order_items.product_id = products.id
+              JOIN orders ON order_items.order_id = orders.id
+            WHERE
+              orders.user_id = :user_id  AND orders.status = 'pending'";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    // للمستخدمين الضيوف - جلب البيانات من الجلسة
+    if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+        foreach ($_SESSION['cart'] as $product_id => $cart_item) {
+            // تحويل بيانات السلة إلى نفس تنسيق قاعدة البيانات
+            $order_items[] = [
+                'id' => 'session_' . $product_id, // معرف مؤقت للجلسة
+                'order_id' => 'session',
+                'product_id' => $product_id,
+                'quantity' => $cart_item['quantity'],
+                'price' => $cart_item['product_details']['price'],
+                'print_text' => $cart_item['print_text'],
+                'total_price' => 0, // سيتم حسابه
+                'name' => $cart_item['product_details']['name'],
+                'image' => $cart_item['product_details']['image'],
+                'total_amount' => $cart_item['quantity'] * $cart_item['product_details']['price']
+            ];
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,7 +93,7 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php if (empty($order_items)): ?>
           <div class="text-center w-100"><h4>Your cart is empty.</h4></div>
         <?php else: ?>
-          <!-- Set the form action to update_cart.php -->
+          <!-- استخدام نفس الملف للجميع -->
           <form class="<?php echo empty($order_items) ? 'col-md-12' : 'col-md-8'; ?>" method="post" action="update_cart.php">
             <div class="site-blocks-table table-responsive">
               <table class="table">
@@ -102,8 +127,13 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="input-group-prepend">
                           <button class="btn btn-outline-black decrease" type="button">&minus;</button>
                         </div>
-                        <!-- Set the input's name to include the order_item id -->
-                        <input type="text" class="form-control text-center quantity-amount" name="quantities[<?php echo $item['id']; ?>]" value="<?php echo htmlspecialchars($item['quantity']); ?>" aria-label="Quantity">
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                          <!-- للمستخدمين المسجلين -->
+                          <input type="text" class="form-control text-center quantity-amount" name="quantities[<?php echo $item['id']; ?>]" value="<?php echo htmlspecialchars($item['quantity']); ?>" aria-label="Quantity">
+                        <?php else: ?>
+                          <!-- للمستخدمين الضيوف -->
+                          <input type="text" class="form-control text-center quantity-amount" name="quantities[<?php echo $item['product_id']; ?>]" value="<?php echo htmlspecialchars($item['quantity']); ?>" aria-label="Quantity">
+                        <?php endif; ?>
                         <div class="input-group-append">
                           <button class="btn btn-outline-black increase" type="button">&plus;</button>
                         </div>
@@ -115,6 +145,7 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
                       <button type="button" class="btn btn-danger btn-md delete-btn" 
                               data-order-item-id="<?php echo htmlspecialchars($item['id']); ?>"
                               data-order-id="<?php echo htmlspecialchars($item['order_id']); ?>"
+                              data-product-id="<?php echo htmlspecialchars($item['product_id']); ?>"
                               data-bs-toggle="modal" data-bs-target="#deleteModal">
                         <i style="color: #D11E1E"  class="bi bi-trash"></i>
                       </button>
@@ -185,6 +216,7 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <form id="deleteForm" action="delete_cart.php" method="POST">
         <input type="hidden" name="order_item_id" value="">
         <input type="hidden" name="order_id" value="">
+        <input type="hidden" name="product_id" value="">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="deleteModalLabel">Remove item</h5>
@@ -213,10 +245,12 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
         const button = event.relatedTarget; // Button that triggered the modal
         const orderItemId = button.getAttribute('data-order-item-id');
         const orderId = button.getAttribute('data-order-id');
+        const productId = button.getAttribute('data-product-id');
 
         // Update the modal's hidden input fields
         deleteForm.querySelector('input[name="order_item_id"]').value = orderItemId;
         deleteForm.querySelector('input[name="order_id"]').value = orderId;
+        deleteForm.querySelector('input[name="product_id"]').value = productId;
     });
 });
 </script>
@@ -245,9 +279,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Ensure the total is updated before form submission
     const form = document.querySelector('form[action="update_cart.php"]');
-    form.addEventListener('submit', function(event) {
-        updateTotal(); // Ensure total is updated before submitting the form
-    });
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            updateTotal(); // Ensure total is updated before submitting the form
+        });
+    }
 
     // Update total initially in case quantities were pre-filled
     updateTotal();

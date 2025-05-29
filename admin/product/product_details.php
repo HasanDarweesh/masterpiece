@@ -13,6 +13,11 @@ function getProductDetails($product_id) {
     return $stmt->fetch();
 }
 
+// فحص ما إذا كان المستخدم مسجل دخول
+function isUserLoggedIn() {
+    return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+}
+
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = $_GET['id'];
 
@@ -26,46 +31,58 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $quantity = 1;
             $print_text = isset($_POST['print_text']) ? $_POST['print_text'] : '';
 
-            // Checking if the order exists
-            $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = ? AND status = 'pending' LIMIT 1");
-            $stmt->execute([$_SESSION['user_id']]);
-            $order = $stmt->fetch();
+            // التحقق من تسجيل الدخول
+            if (isUserLoggedIn()) {
+                // للمستخدمين المسجلين - حفظ في قاعدة البيانات
+                $user_id = $_SESSION['user_id'];
+                
+                // البحث عن طلب معلق للمستخدم
+                $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = ? AND status = 'pending' LIMIT 1");
+                $stmt->execute([$user_id]);
+                $order = $stmt->fetch();
 
-            if ($order) {
-                $order_id = $order['id'];
-            } else {
-                // Creating a new order if not found
-                $stmt = $pdo->prepare("INSERT INTO orders (user_id, status, created_at) VALUES (?, 'pending', NOW())");
-                $stmt->execute([$_SESSION['user_id']]);
+                if ($order) {
+                    $order_id = $order['id'];
+                } else {
+                    // إنشاء طلب جديد
+                    $stmt = $pdo->prepare("INSERT INTO orders (user_id, status, created_at) VALUES (?, 'pending', NOW())");
+                    $stmt->execute([$user_id]);
+
+                    if ($stmt->rowCount() > 0) {
+                        $order_id = $pdo->lastInsertId();
+                    } else {
+                        echo "Error creating order.";
+                        exit();
+                    }
+                }
+
+                // إضافة المنتج لعناصر الطلب
+                $stmt = $pdo->prepare("INSERT INTO order_items (order_id, product_id, quantity, price, print_text) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$order_id, $product_id, $quantity, $product['price'], $print_text]);
 
                 if ($stmt->rowCount() > 0) {
-                    $order_id = $pdo->lastInsertId();
+                    $success_message = "Product added to order successfully.";
                 } else {
-                    echo "Error creating order.";
-                    exit();
+                    $error_message = "Error adding product to order.";
                 }
             }
 
-            // Inserting into order_items
-            $stmt = $pdo->prepare("INSERT INTO order_items (order_id, product_id, quantity, price, print_text) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$order_id, $product_id, $quantity, $product['price'], $print_text]);
-
-            if ($stmt->rowCount() > 0) {
-                echo "Product added to order successfully.";
-            } else {
-                echo "Error adding product to order.";
-            }
-
-            // Adding product to cart
+            // إضافة المنتج للسلة (للمستخدمين المسجلين والضيوف)
             if (!isset($_SESSION['cart'][$product_id])) {
                 $_SESSION['cart'][$product_id] = [
                     'quantity' => $quantity,
-                    'product_details' => $product
+                    'product_details' => $product,
+                    'print_text' => $print_text
                 ];
             } else {
                 $_SESSION['cart'][$product_id]['quantity'] += $quantity;
+                // تحديث النص المخصص إذا تم إدخاله
+                if (!empty($print_text)) {
+                    $_SESSION['cart'][$product_id]['print_text'] = $print_text;
+                }
             }
 
+            // إعادة توجيه للسلة
             header('Location: ../../public/cart/cart.php');
             exit();
         }
@@ -100,6 +117,14 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
+            <?php if (isset($success_message)): ?>
+                <div class="alert alert-success"><?php echo $success_message; ?></div>
+            <?php endif; ?>
+            
+            <?php if (isset($error_message)): ?>
+                <div class="alert alert-danger"><?php echo $error_message; ?></div>
+            <?php endif; ?>
+            
             <div class="card shadow-lg border-0">
                 <div class="row g-0">
                     <div class="col-md-6">
@@ -115,20 +140,26 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <p class="card-text text-muted"><?php echo htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8'); ?></p>
                             <h3 class="text-danger"><?php echo 'JOD ' . number_format($product['price'], 2); ?></h3>
 
+                            <?php if (!isUserLoggedIn()): ?>
+                                <div class="alert alert-info mt-3">
+                                    <small>You're shopping as a guest. <a href="../../public/login/index.php">Login</a> to save your order history.</small>
+                                </div>
+                            <?php endif; ?>
+
                             <!-- Add to cart -->
                             <form method="POST">
                                 <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
 
                                 <!-- Text input for print text -->
                                 <div class="form-group">
-                                    <label for="print_text">Custom Text:</label>
+                                    <label for="print_text">more details</label>
                                     <textarea class="form-control" name="print_text" id="print_text" rows="3"></textarea>
                                 </div>
 
                                 <button type="submit" name="add_to_cart" class="btn btn-outline-secondary btn-lg mt-4">Add to Cart</button>
                             </form>
 
-                            <a href="../../public/home/index.php" class="btn btn-outline-secondary btn-lg mt-4">Back to Store</a>
+                            <a href="../../public/products/shop.php" class="btn btn-outline-secondary btn-lg mt-4">Back to Store</a>
                         </div>
                     </div>
                 </div>

@@ -62,7 +62,7 @@ if (isset($_GET['order_id'])) {
                                     <th>Product Image</th>
                                     <th>Product Name</th>
                                     <th>Quantity</th>
-                                    <th>Custom Text</th>
+                                    <th>more details</th>
                                     <th>Price</th>
                                 </tr>
                             </thead>

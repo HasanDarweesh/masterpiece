@@ -53,13 +53,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if (isset($errorMessage)): ?>
                 <div class="message error"><?= $errorMessage; ?></div>
             <?php endif; ?>
-            <div class="forget">
+            <!-- <div class="forget">
                 <label for="remember">
                     <input type="checkbox" id="remember" name="remember" />
                     <p>Remember me</p>
                 </label>
                 <a href="#">Forgot password?</a>
-            </div>
+            </div> -->
             <button type="submit">Log In</button>
             <div class="register">
                 <p>Don't have an account? <a href="../registration/index.php">Register</a></p>

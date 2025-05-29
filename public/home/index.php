@@ -35,7 +35,6 @@ try {
 		<?php include("../../includes/navbar/index.php"); ?>
 		<!-- End Header/Navigation -->
 
-		<!-- Start Hero Section -->
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" >
     <div class="carousel-inner">
         <!-- Slide 1 -->

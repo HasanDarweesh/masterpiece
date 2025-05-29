@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Fetch the pending order for the user, if it exists
-$sql = "SELECT id FROM orders WHERE user_id = :user_id AND status = 'pending'";
+$sql = "SELECT id, total_price, coupon_id FROM orders WHERE user_id = :user_id AND status = 'pending'";
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 $stmt->execute();
@@ -43,8 +43,8 @@ $stmt->bindValue(':order_id', $order_id, PDO::PARAM_INT);
 $stmt->execute();
 $cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Calculate the total price
-$totalPrice = 0;
+// Calculate the original total price (before any discount)
+$originalTotalPrice = 0;
 $response = [
     'success' => true,
     'cart' => [],
@@ -52,7 +52,7 @@ $response = [
 ];
 
 foreach ($cart as $item) {
-    $totalPrice += $item['total_amount'];
+    $originalTotalPrice += $item['total_amount'];
 
     $response['cart'][] = [
         'product_id' => $item['product_id'],
@@ -68,22 +68,39 @@ foreach ($cart as $item) {
 $phone = $_POST['phone'] ?? '';
 $address = $_POST['address'] ?? '';
 
-// Update the total price, status, phone number, and address in the orders table
+// Check if a coupon was applied to this order
+$finalTotalPrice = $originalTotalPrice; // Default to original price
+
+if ($order['coupon_id'] !== null) {
+    // If coupon was applied, use the already calculated total_price from the order
+    $finalTotalPrice = $order['total_price'];
+} else {
+    // If no coupon applied, update the total price to the calculated original price
+    // This ensures the total_price in orders table is updated with the current cart total
+    $sql = "UPDATE orders SET total_price = :total_price WHERE id = :order_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':total_price', $originalTotalPrice, PDO::PARAM_STR);
+    $stmt->bindValue(':order_id', $order_id, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    $finalTotalPrice = $originalTotalPrice;
+}
+
+// Update the status, phone number, and address in the orders table
+// DO NOT update total_price here if coupon was applied
 $sql = "UPDATE orders 
-        SET total_price = :total_price, 
-            status = 'processing', 
+        SET status = 'processing', 
             shipping_phone = :phone, 
             shipping_address = :address 
         WHERE id = :order_id";
 $stmt = $pdo->prepare($sql);
-$stmt->bindValue(':total_price', $totalPrice, PDO::PARAM_STR);
 $stmt->bindValue(':phone', $phone, PDO::PARAM_STR);
 $stmt->bindValue(':address', $address, PDO::PARAM_STR);
 $stmt->bindValue(':order_id', $order_id, PDO::PARAM_INT);
 $stmt->execute();
 
-// Update the response with the new total price
-$response['total_price'] = $totalPrice;
+// Update the response with the final total price (with discount if applied)
+$response['total_price'] = $finalTotalPrice;
 $response['message'] = "Order placed successfully and is now processing.";
 
 // Return the response as JSON
